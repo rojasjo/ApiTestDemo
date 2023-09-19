@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTestDemo", "ApiTestDemo\ApiTestDemo.csproj", "{7793E07F-3F62-47A9-AA7E-B57560391B87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTestDemo.IntegrationTests", "ApiTestDemo.IntegrationTests\ApiTestDemo.IntegrationTests.csproj", "{1B7FE7B7-5716-4EB4-89DF-D801710F07C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTestDemo.UnitTests", "ApiTestDemo.UnitTests\ApiTestDemo.UnitTests.csproj", "{184E4C04-7D73-4755-9407-756EAA92A80A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{7793E07F-3F62-47A9-AA7E-B57560391B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7793E07F-3F62-47A9-AA7E-B57560391B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7793E07F-3F62-47A9-AA7E-B57560391B87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B7FE7B7-5716-4EB4-89DF-D801710F07C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7FE7B7-5716-4EB4-89DF-D801710F07C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B7FE7B7-5716-4EB4-89DF-D801710F07C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B7FE7B7-5716-4EB4-89DF-D801710F07C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{184E4C04-7D73-4755-9407-756EAA92A80A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{184E4C04-7D73-4755-9407-756EAA92A80A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{184E4C04-7D73-4755-9407-756EAA92A80A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{184E4C04-7D73-4755-9407-756EAA92A80A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
