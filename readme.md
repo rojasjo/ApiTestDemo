@@ -112,7 +112,7 @@ A representation of a problem details response.
 
 </details>
 
-## Integration Testing against APIs:
+## Integration Testing against APIs
 
 ### Introduction
 Integration testing ensures that an application's API functions correctly by testing how its various components interact. It verifies that API endpoints produce expected results when called, helping ensure seamless communication within the system.
@@ -135,8 +135,7 @@ Integration testing ensures that an application's API functions correctly by tes
 
 ### Setup 
 
-The main challange that this project will face is the access to the datbase when calling the API, of course since the goal is to have a proper integration test setup it is not possbile to mock the repositories or the accessa data layer.
-Also, may be difficoult to maintain a database only with the expected data for our test. So we will relay on a SQL-lite in memory database.
+The main challenge that this project will face is accessing the database when calling the API. Since the goal is to establish a proper integration test setup, it is not possible to mock the repositories or the data access layer. Additionally, it may be difficult to maintain a database with only the expected data for our tests. Therefore, we will rely on an in-memory SQL-Lite database.
 
 1. Create a test project with NUnit (e.g. ApiTestDemo.IntegrationTests)
 2. Install the package <code>Microsoft.AspNetCore.Mvc.Testing</code>. This package provides the following features:
@@ -153,7 +152,7 @@ Also, may be difficoult to maintain a database only with the expected data for o
 
 ### Test suite 
 
-1. The <code>WebAppFactory</code> class has to inherit from the <code>WebApplicationFactory`<Program>`</code>. It is necessary that you create a proper class for your Program.cs file. It should look like this:
+ 1. First of all, in order to correctly inherit from <code>WebApplicationFactory<Program></code>, it is necessary to create a proper class for your Program.cs file. The class should be structured as follows:
 ```mermaid
 classDiagram
  class Program {
@@ -161,4 +160,55 @@ classDiagram
     +Main(args: string[])$
  }
  ```
- 
+
+2. The <code>WebAppFactory</code>: it has to inherit from the <code>WebApplicationFactory`<Program>`</code> and overrides the <code>Configure</code>.
+
+```mermaid
+classDiagram
+	class WebAppFactory {
+	- ReplaceDbContextWithInMemoryDb(services: IServiceCollection)$
+	+ ConfigureWebHost(builder: IWebHostBuilder)
+	+ CreateDbContext() : DbContext
+	}
+	class WebApplicationFactory~TEntryPoint~{
+	+ ConfigureWebHost(builder: IWebHostBuilder)
+	}
+
+WebApplicationFactory <|-- WebAppFactory
+```
+
+This class will be responsible for the configuration of all services required for API integration tests.
+In this example, the <code>ReplaceDbContextWithInMemoryDb</code> method replaces the actual database configuration to use the <code>SQLite</code> database.
+
+The <code>CreateDbContext</code> method must ensure that the <code>SQLite</code> database has been created before making calls to the endpoints.
+
+3. The <code>HttpClientFactory</code>: this is a simple yet useful class. Given the <code>WebAppFactory</code>, it will create the instance of the <code>HttpClient</code>. This allows a single location to configure the client properly. It is possible to configure settings such as the <code>BaseAddress</code> or, in more advanced scenario, the <code>Authentication</code> headers.
+
+4. <code>ApiIntegrationTestFixture</code>: This abastract class serves as template for the actual tests. It defines the <code>Setup</code> and <code>Teardown</code> procedures.
+To prevent tests from interfearing each others, it is important follow tese guidelines:
+* Setup:
+    * Create a new istance of the <code>WebAppFactory</code>
+    * Ensure that the <code>SqlLite</code> database has been created correctly.
+    * Create a new istance of the <code>HttpClient</code>
+* Teardown
+  * Delete the database and dispose it
+  * dispose the WebAppFactory and HttClient
+
+5. Finally we can test the code:
+
+<code>
+
+    [Test]
+    public async Task Post_ValidTodo_Returns201Created()
+    {
+        var todo = new TodoForCreationDto { Title = "Title", Description = "Description" };
+
+        var httpResponseMessage = await HttpClient.PostAsJsonAsync("api/todos", todo);
+
+        Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+    }
+
+</code>
+
+### Conclusion
+Setting up an entrire test suite for your application will be quite challenging but at the end the efforts will pay high dividends.
